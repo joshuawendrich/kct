@@ -18,18 +18,19 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping("/upload-customers-data")
-    public ResponseEntity<?> uploadCustomersData(@RequestParam("file")MultipartFile file){
+    public ResponseEntity<?> uploadCustomersData(@RequestParam("file") MultipartFile file) {
         this.customerService.saveCustomersToDatabase(file);
         return ResponseEntity
-                .ok(Map.of("Message" , " Customers data uploaded and saved to database successfully"));
+                .ok(Map.of("Message", " Customers data uploaded and saved to database successfully"));
     }
 
     @GetMapping
     public ResponseEntity<List<Customer12>> getCustomers() {
         return new ResponseEntity<>(customerService.getCustomers(), HttpStatus.FOUND);
     }
+
     @GetMapping("/helloworld")
-    public String helloworld(){
+    public String helloworld() {
         return "hello1234";
     }
 
