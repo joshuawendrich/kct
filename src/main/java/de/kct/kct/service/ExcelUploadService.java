@@ -96,7 +96,7 @@ public class ExcelUploadService {
                         case 57 -> customer1.setLeistungssegment(cell.getStringCellValue());
                         case 58 -> customer1.setProduktgruppe(cell.getStringCellValue());
                         case 59 -> customer1.setBestandsId(cell.getStringCellValue());
-                        case 60 -> customer1.setId((int) cell.getNumericCellValue());
+                        case 60 -> customer1.setId(Integer.parseInt(cell.getStringCellValue()));
                         case 61 -> customer1.setPeriode((int) cell.getNumericCellValue());
                         default -> {
                         }
