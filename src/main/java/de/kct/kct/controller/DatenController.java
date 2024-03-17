@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("data")
+@RequestMapping("/data")
 public class DatenController {
     private DatenService datenService;
 

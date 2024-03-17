@@ -74,6 +74,6 @@ public class Datensatz {
     private String produktgruppe;
     private String bestandsId;
     @Id
-    private String id;
+    private Integer id;
     private Integer periode;
 }
