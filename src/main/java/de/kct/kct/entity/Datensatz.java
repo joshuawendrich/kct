@@ -76,4 +76,7 @@ public class Datensatz {
     @Id
     private Integer id;
     private Integer periode;
+
+    // Zusatzfelder
+
 }
