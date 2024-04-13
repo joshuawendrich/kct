@@ -1,6 +1,7 @@
 package de.kct.kct.controller;
 
 import de.kct.kct.entity.Datensatz;
+import de.kct.kct.entity.ZusatzInfos;
 import de.kct.kct.service.DatenService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,11 @@ public class DatenController {
     @GetMapping
     public ResponseEntity<List<Datensatz>> getData() {
         return new ResponseEntity<>(datenService.getData(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/zusatz-infos")
+    public ResponseEntity<ZusatzInfos> getZusatzInfosForDatensatz(@PathVariable Integer id) {
+        return ResponseEntity.ok(datenService.getZusatzInfosForDatensatz(id));
     }
 
 }
