@@ -1,5 +1,6 @@
 package de.kct.kct.service;
 
+import de.kct.kct.dto.UpdateZusatzInfosDto;
 import de.kct.kct.entity.Datensatz;
 import de.kct.kct.entity.ZusatzInfos;
 import de.kct.kct.repository.DatensatzRepository;
@@ -40,7 +41,23 @@ public class DatenService {
         return zusatzInfos.orElseGet(ZusatzInfos::new);
     }
 
+    private ZusatzInfos findOrCreateZusatzInfos(Integer id) {
+        ZusatzInfos zusatzInfos = findZusatzInfos(id);
+        if(zusatzInfos.getDatensatz() == null) {
+            zusatzInfos.setDatensatz(datensatzRepository.getReferenceById(id));
+        }
+        return zusatzInfos;
+    }
+
     public ZusatzInfos getZusatzInfosForDatensatz(Integer id) {
         return findZusatzInfos(id);
+    }
+
+    public void updateZusatzInfos(Integer datensatzId, UpdateZusatzInfosDto updateZusatzInfosDto) {
+        ZusatzInfos zusatzInfos = findOrCreateZusatzInfos(datensatzId);
+        zusatzInfos.setBemerkung(updateZusatzInfosDto.bemerkung());
+        zusatzInfos.setPspElement(updateZusatzInfosDto.psp());
+        zusatzInfos.setAbgerechnetMonat(updateZusatzInfosDto.abgerechnet());
+        zusatzInfosRepository.save(zusatzInfos);
     }
 }
