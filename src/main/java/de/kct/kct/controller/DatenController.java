@@ -1,11 +1,11 @@
 package de.kct.kct.controller;
 
+import de.kct.kct.dto.DatensatzDto;
 import de.kct.kct.dto.UpdateZusatzInfosDto;
-import de.kct.kct.entity.Datensatz;
+import de.kct.kct.dto.ZusatzInfosDto;
 import de.kct.kct.entity.ZusatzInfos;
 import de.kct.kct.service.DatenService;
 import lombok.AllArgsConstructor;
-import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +29,12 @@ public class DatenController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Datensatz>> getData() {
+    public ResponseEntity<List<DatensatzDto>> getData() {
         return new ResponseEntity<>(datenService.getData(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/zusatz-infos")
-    public ResponseEntity<ZusatzInfos> getZusatzInfosForDatensatz(@PathVariable Integer id) {
+    public ResponseEntity<ZusatzInfosDto> getZusatzInfosForDatensatz(@PathVariable Integer id) {
         return ResponseEntity.ok(datenService.getZusatzInfosForDatensatz(id));
     }
 

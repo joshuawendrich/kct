@@ -1,5 +1,6 @@
 package de.kct.kct.entity;
 
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -78,5 +79,7 @@ public class Datensatz {
     private Integer periode;
 
     // Zusatzfelder
+    @OneToOne(mappedBy = "datensatz")
+    private ZusatzInfos zusatzInfos;
 
 }

@@ -1,6 +1,8 @@
 package de.kct.kct.service;
 
+import de.kct.kct.dto.DatensatzDto;
 import de.kct.kct.dto.UpdateZusatzInfosDto;
+import de.kct.kct.dto.ZusatzInfosDto;
 import de.kct.kct.entity.Datensatz;
 import de.kct.kct.entity.ZusatzInfos;
 import de.kct.kct.repository.DatensatzRepository;
@@ -31,8 +33,8 @@ public class DatenService {
         }
     }
 
-    public List<Datensatz> getData() {
-        return datensatzRepository.findDatensaetze(PageRequest.of(0, 100));
+    public List<DatensatzDto> getData() {
+        return datensatzRepository.findDatensaetze(PageRequest.of(0, 20)).stream().map(DatensatzDto::fromDatensatz).toList();
     }
 
     private ZusatzInfos findZusatzInfos(Integer id) {
@@ -43,14 +45,14 @@ public class DatenService {
 
     private ZusatzInfos findOrCreateZusatzInfos(Integer id) {
         ZusatzInfos zusatzInfos = findZusatzInfos(id);
-        if(zusatzInfos.getDatensatz() == null) {
+        if (zusatzInfos.getDatensatz() == null) {
             zusatzInfos.setDatensatz(datensatzRepository.getReferenceById(id));
         }
         return zusatzInfos;
     }
 
-    public ZusatzInfos getZusatzInfosForDatensatz(Integer id) {
-        return findZusatzInfos(id);
+    public ZusatzInfosDto getZusatzInfosForDatensatz(Integer id) {
+        return ZusatzInfosDto.fromZusatzInfos(findZusatzInfos(id));
     }
 
     public void updateZusatzInfos(Integer datensatzId, UpdateZusatzInfosDto updateZusatzInfosDto) {
