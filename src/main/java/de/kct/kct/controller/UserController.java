@@ -2,6 +2,7 @@ package de.kct.kct.controller;
 
 import de.kct.kct.dto.AuthDto;
 import de.kct.kct.dto.LoginDto;
+import de.kct.kct.dto.RegisterDto;
 import de.kct.kct.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    ResponseEntity<AuthDto> registerUser(@RequestBody LoginDto registerDto) {
+    ResponseEntity<AuthDto> registerUser(@RequestBody RegisterDto registerDto) {
         return new ResponseEntity<>(userService.registerUser(registerDto), HttpStatus.CREATED);
     }
 }

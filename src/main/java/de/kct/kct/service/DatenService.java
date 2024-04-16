@@ -4,6 +4,8 @@ import de.kct.kct.dto.DatensatzDto;
 import de.kct.kct.dto.UpdateZusatzInfosDto;
 import de.kct.kct.dto.ZusatzInfosDto;
 import de.kct.kct.entity.Datensatz;
+import de.kct.kct.entity.User;
+import de.kct.kct.entity.UserKostenstelle;
 import de.kct.kct.entity.ZusatzInfos;
 import de.kct.kct.repository.DatensatzRepository;
 import de.kct.kct.repository.ZusatzInfosRepository;
@@ -33,8 +35,11 @@ public class DatenService {
         }
     }
 
-    public List<DatensatzDto> getData() {
-        return datensatzRepository.findDatensaetze(PageRequest.of(0, 20)).stream().map(DatensatzDto::fromDatensatz).toList();
+    public List<DatensatzDto> getData(User user, String kostenstelle, Integer page, Integer pageSize) {
+        if (kostenstelle != null && user.getKostenstellen().stream().noneMatch(k -> k.getKostenstelle().equals(kostenstelle)))
+            throw new RuntimeException();
+        var kostenstellen = kostenstelle == null ? user.getKostenstellen().stream().map(UserKostenstelle::getKostenstelle).toList() : List.of(kostenstelle);
+        return datensatzRepository.findDatensaetze(kostenstellen, PageRequest.of(page, pageSize)).stream().map(DatensatzDto::fromDatensatz).toList();
     }
 
     private ZusatzInfos findZusatzInfos(Integer id) {

@@ -1,9 +1,6 @@
 package de.kct.kct.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -28,6 +27,9 @@ public class User implements UserDetails {
     private String email;
 
     private String passwordHash;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Set<UserKostenstelle> kostenstellen = new HashSet<>();
 
 
     @Override

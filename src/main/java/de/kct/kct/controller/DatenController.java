@@ -3,8 +3,8 @@ package de.kct.kct.controller;
 import de.kct.kct.dto.DatensatzDto;
 import de.kct.kct.dto.UpdateZusatzInfosDto;
 import de.kct.kct.dto.ZusatzInfosDto;
-import de.kct.kct.entity.ZusatzInfos;
 import de.kct.kct.service.DatenService;
+import de.kct.kct.util.UserUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,8 +29,8 @@ public class DatenController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DatensatzDto>> getData() {
-        return new ResponseEntity<>(datenService.getData(), HttpStatus.OK);
+    public ResponseEntity<List<DatensatzDto>> getData(@RequestParam Integer page, @RequestParam Integer pageSize, @RequestParam(required = false) String kostenstelle) {
+        return new ResponseEntity<>(datenService.getData(UserUtils.getCurrentUser(), kostenstelle, page, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/zusatz-infos")
