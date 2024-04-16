@@ -11,6 +11,7 @@ import de.kct.kct.repository.DatensatzRepository;
 import de.kct.kct.repository.ZusatzInfosRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +40,7 @@ public class DatenService {
         if (kostenstelle != null && user.getKostenstellen().stream().noneMatch(k -> k.getKostenstelle().equals(kostenstelle)))
             throw new RuntimeException();
         var kostenstellen = kostenstelle == null ? user.getKostenstellen().stream().map(UserKostenstelle::getKostenstelle).toList() : List.of(kostenstelle);
-        return datensatzRepository.findDatensaetze(kostenstellen, PageRequest.of(page, pageSize)).stream().map(DatensatzDto::fromDatensatz).toList();
+        return datensatzRepository.findDatensaetze(kostenstellen, Pageable.unpaged()).stream().map(DatensatzDto::fromDatensatz).toList();
     }
 
     private ZusatzInfos findZusatzInfos(Integer id) {

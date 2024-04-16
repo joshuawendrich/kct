@@ -29,7 +29,7 @@ public class DatenController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DatensatzDto>> getData(@RequestParam Integer page, @RequestParam Integer pageSize, @RequestParam(required = false) String kostenstelle) {
+    public ResponseEntity<List<DatensatzDto>> getData(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String kostenstelle) {
         return new ResponseEntity<>(datenService.getData(UserUtils.getCurrentUser(), kostenstelle, page, pageSize), HttpStatus.OK);
     }
 
