@@ -34,7 +34,7 @@ public class DatenController {
         return new ResponseEntity<>(datenService.getData(UserUtils.getCurrentUser(), kostenstelle, page, pageSize), HttpStatus.OK);
     }
 
-    @PostMapping("/download")
+    @GetMapping("/download")
     public ResponseEntity<byte[]> downloadData(@RequestParam(required = false) String kostenstelle) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
