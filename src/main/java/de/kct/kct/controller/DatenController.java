@@ -6,6 +6,7 @@ import de.kct.kct.dto.ZusatzInfosDto;
 import de.kct.kct.service.DatenService;
 import de.kct.kct.util.UserUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,15 @@ public class DatenController {
     public ResponseEntity<List<DatensatzDto>> getData(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String kostenstelle) {
         return new ResponseEntity<>(datenService.getData(UserUtils.getCurrentUser(), kostenstelle, page, pageSize), HttpStatus.OK);
     }
+
+    @PostMapping("/download")
+    public ResponseEntity<byte[]> downloadData(@RequestParam(required = false) String kostenstelle) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        headers.set("Content-Disposition", "attachment; filename=\"data.xlsx\"");
+        return ResponseEntity.ok().headers(headers).body(datenService.downloadData(UserUtils.getCurrentUser(), kostenstelle));
+    }
+
 
     @GetMapping("/{id}/zusatz-infos")
     public ResponseEntity<ZusatzInfosDto> getZusatzInfosForDatensatz(@PathVariable Integer id) {
