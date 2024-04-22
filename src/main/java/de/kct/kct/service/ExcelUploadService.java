@@ -87,7 +87,7 @@ public class ExcelUploadService {
                         case 48 -> customer1.setEinzelpreis((int) cell.getNumericCellValue());
                         case 49 -> customer1.setVkZuschlag(cell.getStringCellValue());
                         case 50 -> customer1.setArbeitsplatzZuschlag(cell.getStringCellValue());
-                        case 51 -> customer1.setGesamtpreis((int) cell.getNumericCellValue());
+                        case 51 -> customer1.setGesamtpreis(cell.getNumericCellValue());
                         case 52 -> customer1.setMonat((int) cell.getNumericCellValue());
                         case 53 -> customer1.setJahr((int) cell.getNumericCellValue());
                         case 54 -> customer1.setRechnungsnummer(cell.getStringCellValue());

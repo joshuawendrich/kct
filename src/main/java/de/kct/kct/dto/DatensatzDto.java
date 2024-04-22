@@ -54,7 +54,7 @@ public record DatensatzDto(
         Integer einzelpreis,
         String vkZuschlag,
         String arbeitsplatzZuschlag,
-        Integer gesamtpreis,
+        Double gesamtpreis,
         Integer monat,
         Integer jahr,
         String rechnungsnummer,

@@ -65,7 +65,7 @@ public class Datensatz {
     private Integer einzelpreis;
     private String vkZuschlag;
     private String arbeitsplatzZuschlag;
-    private Integer gesamtpreis;
+    private Double gesamtpreis;
     private Integer monat;
     private Integer jahr;
     private String rechnungsnummer;
