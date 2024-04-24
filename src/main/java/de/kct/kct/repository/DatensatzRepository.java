@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface DatensatzRepository extends JpaRepository<Datensatz, Integer> {
-    @Query("SELECT d FROM Datensatz d WHERE d.kostenstelle in ?1")
+    @Query("SELECT d FROM Datensatz d WHERE d.kostenstelle IN ?1")
     List<Datensatz> findDatensaetzeForKostenstellen(List<String> kostenstellen, Pageable pageable);
+
+    @Query("SELECT d FROM Datensatz d WHERE d.detailangabe1 = ?1 AND d.nutzer = ?2 AND d.zusatzInfos.pspElement IS NOT NULL AND d.zusatzInfos.pspElement != ''")
+    List<Datensatz> findDatensaetzeForDetailAndNutzer(String detailangabe1, String nutzer);
 }

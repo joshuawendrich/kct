@@ -1,5 +1,6 @@
 package de.kct.kct.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -79,7 +80,7 @@ public class Datensatz {
     private Integer periode;
 
     // Zusatzfelder
-    @OneToOne(mappedBy = "datensatz")
+    @OneToOne(mappedBy = "datensatz", cascade = CascadeType.ALL)
     private ZusatzInfos zusatzInfos;
 
 }

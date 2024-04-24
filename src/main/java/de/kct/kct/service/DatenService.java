@@ -31,11 +31,12 @@ import java.util.Optional;
 public class DatenService {
     private DatensatzRepository datensatzRepository;
     private ZusatzInfosRepository zusatzInfosRepository;
+    private ExcelUploadService excelUploadService;
 
     public void saveData(MultipartFile file) {
-        if (ExcelUploadService.isValidExcelFile(file)) {
+        if (excelUploadService.isValidExcelFile(file)) {
             try {
-                List<Datensatz> customers = ExcelUploadService.getDataFromExcel(file.getInputStream());
+                List<Datensatz> customers = excelUploadService.getDataFromExcel(file.getInputStream());
                 this.datensatzRepository.saveAll(customers);
             } catch (IOException e) {
                 throw new IllegalArgumentException("The file is not a valid excel file");
