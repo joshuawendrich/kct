@@ -10,8 +10,10 @@ import de.kct.kct.entity.ZusatzInfos;
 import de.kct.kct.repository.DatensatzRepository;
 import de.kct.kct.repository.ZusatzInfosRepository;
 import lombok.AllArgsConstructor;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFFactory;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -167,6 +170,9 @@ public class DatenService {
         zusatzInfos.setBemerkung(updateZusatzInfosDto.bemerkung());
         zusatzInfos.setPspElement(updateZusatzInfosDto.psp());
         zusatzInfos.setAbgerechnetMonat(updateZusatzInfosDto.abgerechnet());
+        if (zusatzInfos.getPspElement() != null && !zusatzInfos.getPspElement().isEmpty() && zusatzInfos.getAbgerechnetMonat() == null) {
+            zusatzInfos.setAbgerechnetMonat(LocalDate.now().getMonthValue());
+        }
         zusatzInfosRepository.save(zusatzInfos);
     }
 }
