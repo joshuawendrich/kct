@@ -1,10 +1,12 @@
 package de.kct.kct.service;
 
+import de.kct.kct.entity.Artikelstammdaten;
 import de.kct.kct.entity.Datensatz;
 import de.kct.kct.entity.ZusatzInfos;
 import de.kct.kct.repository.DatensatzRepository;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -111,7 +113,7 @@ public class ExcelUploadService {
                     cellIndex++;
                 }
                 Optional<Datensatz> alreadyExistingDatensatz = datensatzRepository.findById(datensatz.getId());
-                if(alreadyExistingDatensatz.isEmpty()) {
+                if (alreadyExistingDatensatz.isEmpty()) {
                     List<Datensatz> previousDatensaetze = datensatzRepository.findDatensaetzeForDetailAndNutzer(datensatz.getDetailangabe1(), datensatz.getNutzer());
                     if (!previousDatensaetze.isEmpty()) {
                         ZusatzInfos zusatzInfos = new ZusatzInfos();
@@ -127,6 +129,92 @@ public class ExcelUploadService {
             e.getStackTrace();
         }
         return customers;
+    }
+
+    public List<Artikelstammdaten> getArtikelstammdatenFromExcel(InputStream inputStream) {
+        List<Artikelstammdaten> artikelstammdatenList = new ArrayList<>();
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = workbook.getSheet("3800_Artikelstammdaten");
+            int rowIndex = 0;
+            for (Row row : sheet) {
+                if (rowIndex == 0) {
+                    rowIndex++;
+                    continue;
+                }
+                Iterator<Cell> cellIterator = row.iterator();
+                int cellIndex = 0;
+                Artikelstammdaten artikelstammdaten = new Artikelstammdaten();
+                while (cellIterator.hasNext()) {
+                    Cell cell = cellIterator.next();
+                    switch (cellIndex) {
+                        case 0 -> artikelstammdaten.setArtikelnummer(cell.getStringCellValue());
+                        case 1 -> artikelstammdaten.setKatalogPositionNr(cell.getStringCellValue());
+                        case 2 -> artikelstammdaten.setBezeichnung(cell.getStringCellValue());
+                        case 3 -> artikelstammdaten.setKatalogPositionBez(cell.getStringCellValue());
+                        case 4 -> artikelstammdaten.setModulbezeichnung(cell.getStringCellValue());
+                        case 5 -> artikelstammdaten.setKatalog(cell.getStringCellValue());
+                        case 6 -> artikelstammdaten.setServicelevel(cell.getStringCellValue());
+                        case 7 -> artikelstammdaten.setPerformancelevel(cell.getStringCellValue());
+                        case 8 -> artikelstammdaten.setLeistungstyp(cell.getStringCellValue());
+                        case 9 -> artikelstammdaten.setPms(cell.getStringCellValue());
+                        case 10 -> artikelstammdaten.setIlv(cell.getStringCellValue());
+                        case 11 -> artikelstammdaten.setHerstellkosten(cell.getNumericCellValue());
+                        case 12 -> artikelstammdaten.setZielkosten(cell.getNumericCellValue());
+                        case 13 -> artikelstammdaten.setVerkaufspreis(cell.getNumericCellValue());
+                        case 14 -> {
+                            var oe = cell.getStringCellValue();
+                            artikelstammdaten.setOe(oe);
+                            if (oe.length() > 3) {
+                                artikelstammdaten.setOeKurz(oe.substring(3));
+                            }
+                        }
+                        case 16 -> artikelstammdaten.setEinheit(cell.getStringCellValue());
+                        case 17 -> artikelstammdaten.setKstid(getStringValueFromStringOrNumericCell(cell));
+                        case 19 -> artikelstammdaten.setGueltigVon(getStringValueFromStringOrNumericCell(cell));
+                        case 20 -> artikelstammdaten.setGueltigBis(getStringValueFromStringOrNumericCell(cell));
+                        case 21 -> artikelstammdaten.setGueltig(cell.getStringCellValue());
+                        case 22 -> artikelstammdaten.setBindefrist(getStringValueFromStringOrNumericCell(cell));
+                        case 23 -> artikelstammdaten.setStatus(getStringValueFromStringOrNumericCell(cell));
+                        case 24 -> artikelstammdaten.setMinMenge(getStringValueFromStringOrNumericCell(cell));
+                        case 25 -> artikelstammdaten.setAvgMenge(getStringValueFromStringOrNumericCell(cell));
+                        case 26 -> artikelstammdaten.setMaxMenge(getStringValueFromStringOrNumericCell(cell));
+                        case 27 -> artikelstammdaten.setManuelleKalkulation(getStringValueFromStringOrNumericCell(cell));
+                        case 28 -> artikelstammdaten.setZuschlag(getStringValueFromStringOrNumericCell(cell));
+                        case 29 -> artikelstammdaten.setLizenztyp(getStringValueFromStringOrNumericCell(cell));
+                        case 30 -> artikelstammdaten.setLvdb(getStringValueFromStringOrNumericCell(cell));
+                        case 31 -> artikelstammdaten.setEinmal(getStringValueFromStringOrNumericCell(cell));
+                        case 32 -> artikelstammdaten.setBestandsschutz(getStringValueFromStringOrNumericCell(cell));
+                        case 33 -> artikelstammdaten.setBestandsschutzAbKatalog(getStringValueFromStringOrNumericCell(cell));
+                        case 34 -> artikelstammdaten.setLizenzmodell(getStringValueFromStringOrNumericCell(cell));
+                        case 35 -> artikelstammdaten.setPaketierung(getStringValueFromStringOrNumericCell(cell));
+                        case 36 -> artikelstammdaten.setFaktorFArtikel(getStringValueFromStringOrNumericCell(cell));
+                        case 37 -> artikelstammdaten.setSubartikelliste(getStringValueFromStringOrNumericCell(cell));
+                        case 38 -> artikelstammdaten.setArtikelart(getStringValueFromStringOrNumericCell(cell));
+                        case 39 -> artikelstammdaten.setPreisuntergrenze(cell.getNumericCellValue());
+                        case 40 -> artikelstammdaten.setPreisregel(getStringValueFromStringOrNumericCell(cell));
+                        case 41 -> artikelstammdaten.setBmHerstellkosten(cell.getNumericCellValue());
+                        case 42 -> artikelstammdaten.setBmPreis(cell.getNumericCellValue());
+                        case 43 -> artikelstammdaten.setKalkulierteHerstellkosten(cell.getNumericCellValue());
+                        case 44 -> artikelstammdaten.setKalkulierterPreis(cell.getNumericCellValue());
+                        case 45 -> artikelstammdaten.setBenchmarkArtikel(getStringValueFromStringOrNumericCell(cell));
+                        case 46 -> artikelstammdaten.setAufwandsbezogen(getStringValueFromStringOrNumericCell(cell));
+                        default -> {
+                        }
+                    }
+                    cellIndex++;
+                }
+
+                artikelstammdatenList.add(artikelstammdaten);
+            }
+        } catch (IOException e) {
+            e.getStackTrace();
+        }
+        return artikelstammdatenList;
+    }
+
+    private String getStringValueFromStringOrNumericCell(Cell cell) {
+        return cell.getCellType() == CellType.NUMERIC ? String.valueOf(cell.getNumericCellValue()) : cell.getStringCellValue();
     }
 
 

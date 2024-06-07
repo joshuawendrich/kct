@@ -31,7 +31,7 @@ public class Datensatz {
     private String debitornummer;
     private String kunde;
     private String bahnstelle;
-    private String organisationseinheit;
+    private String organisationseinheit; // oe kurz
     private String kostenstelle;
     private String sapPspElement;
     private String sapPspElementBezeichnung;
