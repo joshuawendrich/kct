@@ -8,10 +8,11 @@ public record ZusatzInfosDto(
         String bemerkung,
         Integer abgerechnetMonat,
         String vergleichIlv,
-        String pspElement
+        String pspElement,
+        Integer abgerechnetJahr
 ) {
     public static ZusatzInfosDto fromZusatzInfos(ZusatzInfos zusatzInfos) {
         if(zusatzInfos == null) return null;
-        return new ZusatzInfosDto(zusatzInfos.getId(), zusatzInfos.getBemerkung(), zusatzInfos.getAbgerechnetMonat(), zusatzInfos.getVergleichIlv(), zusatzInfos.getPspElement());
+        return new ZusatzInfosDto(zusatzInfos.getId(), zusatzInfos.getBemerkung(), zusatzInfos.getAbgerechnetMonat(), zusatzInfos.getVergleichIlv(), zusatzInfos.getPspElement(), zusatzInfos.getAbgerechnetJahr());
     }
 }

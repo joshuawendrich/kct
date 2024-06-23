@@ -171,8 +171,11 @@ public class DatenService {
         zusatzInfos.setBemerkung(updateZusatzInfosDto.bemerkung());
         zusatzInfos.setPspElement(updateZusatzInfosDto.psp());
         zusatzInfos.setAbgerechnetMonat(updateZusatzInfosDto.abgerechnet());
-        if (zusatzInfos.getPspElement() != null && !zusatzInfos.getPspElement().isEmpty() && zusatzInfos.getAbgerechnetMonat() == null) {
-            zusatzInfos.setAbgerechnetMonat(LocalDate.now().getMonthValue());
+        if (zusatzInfos.getPspElement() != null && !zusatzInfos.getPspElement().isEmpty()) {
+            if (zusatzInfos.getAbgerechnetMonat() == null) {
+                zusatzInfos.setAbgerechnetMonat(LocalDate.now().getMonthValue());
+            }
+            zusatzInfos.setAbgerechnetJahr(LocalDate.now().getYear());
         }
         zusatzInfosRepository.save(zusatzInfos);
     }

@@ -21,4 +21,5 @@ public class ZusatzInfos {
     private Integer abgerechnetMonat;
     private String vergleichIlv;
     private String pspElement;
+    private Integer abgerechnetJahr;
 }
