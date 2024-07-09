@@ -179,13 +179,15 @@ public class ExcelUploadService {
                         case 24 -> artikelstammdaten.setMinMenge(getStringValueFromStringOrNumericCell(cell));
                         case 25 -> artikelstammdaten.setAvgMenge(getStringValueFromStringOrNumericCell(cell));
                         case 26 -> artikelstammdaten.setMaxMenge(getStringValueFromStringOrNumericCell(cell));
-                        case 27 -> artikelstammdaten.setManuelleKalkulation(getStringValueFromStringOrNumericCell(cell));
+                        case 27 ->
+                                artikelstammdaten.setManuelleKalkulation(getStringValueFromStringOrNumericCell(cell));
                         case 28 -> artikelstammdaten.setZuschlag(getStringValueFromStringOrNumericCell(cell));
                         case 29 -> artikelstammdaten.setLizenztyp(getStringValueFromStringOrNumericCell(cell));
                         case 30 -> artikelstammdaten.setLvdb(getStringValueFromStringOrNumericCell(cell));
                         case 31 -> artikelstammdaten.setEinmal(getStringValueFromStringOrNumericCell(cell));
                         case 32 -> artikelstammdaten.setBestandsschutz(getStringValueFromStringOrNumericCell(cell));
-                        case 33 -> artikelstammdaten.setBestandsschutzAbKatalog(getStringValueFromStringOrNumericCell(cell));
+                        case 33 ->
+                                artikelstammdaten.setBestandsschutzAbKatalog(getStringValueFromStringOrNumericCell(cell));
                         case 34 -> artikelstammdaten.setLizenzmodell(getStringValueFromStringOrNumericCell(cell));
                         case 35 -> artikelstammdaten.setPaketierung(getStringValueFromStringOrNumericCell(cell));
                         case 36 -> artikelstammdaten.setFaktorFArtikel(getStringValueFromStringOrNumericCell(cell));
@@ -204,8 +206,9 @@ public class ExcelUploadService {
                     }
                     cellIndex++;
                 }
-
-                artikelstammdatenList.add(artikelstammdaten);
+                if (artikelstammdaten.getBezeichnung().toLowerCase().startsWith("ilv")) {
+                    artikelstammdatenList.add(artikelstammdaten);
+                }
             }
         } catch (IOException e) {
             e.getStackTrace();
