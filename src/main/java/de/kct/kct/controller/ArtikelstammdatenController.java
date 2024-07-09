@@ -1,6 +1,8 @@
 package de.kct.kct.controller;
 
+import de.kct.kct.dto.GenerateIlvDto;
 import de.kct.kct.service.ArtikelstammdatenService;
+import de.kct.kct.util.UserUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,5 +27,11 @@ public class ArtikelstammdatenController {
     ResponseEntity<Void> getAllArtikelstammdaten() {
         artikelstammdatenService.getAll();
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/ilv")
+    ResponseEntity<byte[]> generateIlv(@RequestBody GenerateIlvDto generateIlvDto) {
+        return ResponseEntity.ok(artikelstammdatenService.generateIlv(UserUtils.getCurrentUser(), generateIlvDto));
+
     }
 }
