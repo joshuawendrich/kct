@@ -93,7 +93,7 @@ public class ArtikelstammdatenService {
             setCellValue(row, 2, datensatz.getZusatzInfos().getPspElement());
             setCellValue(row, 3, artikelstammdaten.getArtikelnummer());
             setCellValue(row, 4, datensatz.getGesamtpreis());
-            setCellValue(row, 5, "1");
+            setCellValue(row, 5, 1);
             setCellValue(row, 6, "");
             setCellValue(row, 7, String.valueOf(month));
         }
