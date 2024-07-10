@@ -4,6 +4,7 @@ import de.kct.kct.dto.GenerateIlvDto;
 import de.kct.kct.service.ArtikelstammdatenService;
 import de.kct.kct.util.UserUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,10 @@ public class ArtikelstammdatenController {
 
     @PostMapping("/ilv")
     ResponseEntity<byte[]> generateIlv(@RequestBody GenerateIlvDto generateIlvDto) {
-        return ResponseEntity.ok(artikelstammdatenService.generateIlv(UserUtils.getCurrentUser(), generateIlvDto));
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        headers.set("Content-Disposition", "attachment; filename=\"ilv.xlsx\"");
+        return ResponseEntity.ok().headers(headers).body((artikelstammdatenService.generateIlv(UserUtils.getCurrentUser(), generateIlvDto)));
 
     }
 }

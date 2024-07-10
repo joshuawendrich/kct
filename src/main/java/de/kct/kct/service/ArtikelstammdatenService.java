@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -86,7 +87,9 @@ public class ArtikelstammdatenService {
         headerCell.setCellValue("Monat");
         for (int i = 0; i < datensaetze.size(); i++) {
             Datensatz datensatz = datensaetze.get(i);
-            Artikelstammdaten artikelstammdaten = artikelstammdatenList.stream().filter(it -> it.getOeKurz() != null && it.getOeKurz().equals(datensatz.getOrganisationseinheit())).findFirst().orElseThrow();
+            Optional<Artikelstammdaten> artikelstammdatenOptional = artikelstammdatenList.stream().filter(it -> it.getOeKurz() != null && it.getOeKurz().equals(datensatz.getOrganisationseinheit())).findFirst();
+            if (artikelstammdatenOptional.isEmpty()) continue;
+            Artikelstammdaten artikelstammdaten = artikelstammdatenOptional.get();
             Row row = sheet.createRow(i + 1);
             setCellValue(row, 0, String.valueOf(year));
             setCellValue(row, 1, artikelstammdaten.getModulbezeichnung());
