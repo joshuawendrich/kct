@@ -167,8 +167,13 @@ public class DatenService {
     }
 
     public void updateZusatzInfos(Integer datensatzId, UpdateZusatzInfosDto updateZusatzInfosDto) {
+        changeZusatzInfos(datensatzId, updateZusatzInfosDto, true);
+        datensatzRepository.findOtherDatensaetze(datensatzId).forEach(ds -> changeZusatzInfos(ds.getId(), updateZusatzInfosDto, false));
+    }
+
+    private void changeZusatzInfos(Integer datensatzId, UpdateZusatzInfosDto updateZusatzInfosDto, boolean includeBemerkung) {
         ZusatzInfos zusatzInfos = findOrCreateZusatzInfos(datensatzId);
-        zusatzInfos.setBemerkung(updateZusatzInfosDto.bemerkung());
+        if (includeBemerkung) zusatzInfos.setBemerkung(updateZusatzInfosDto.bemerkung());
         zusatzInfos.setPspElement(updateZusatzInfosDto.psp());
         zusatzInfos.setAbgerechnetMonat(updateZusatzInfosDto.abgerechnet());
         if (zusatzInfos.getPspElement() != null && !zusatzInfos.getPspElement().isEmpty()) {
