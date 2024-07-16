@@ -44,22 +44,22 @@ public class UserService {
     }
 
     public AuthDto registerUser(RegisterDto registerDto) {
-        if (registerDto.kostenstellen() == null || registerDto.kostenstellen().isEmpty())
-            throw new IllegalStateException();
         String emailLowerCase = registerDto.email().toLowerCase();
         Optional<User> userWithEmail = userRepository.findByEmail(emailLowerCase);
         if (userWithEmail.isPresent()) throw new IllegalStateException();
         User user = new User();
         user.setEmail(emailLowerCase);
         user.setPasswordHash(passwordEncoder.encode(registerDto.password()));
-        registerDto.kostenstellen().forEach(it -> {
-            var kostenstelleCheck = datensatzRepository.findDatensaetzeForKostenstellen(List.of(it), PageRequest.of(0, 1));
-            if (kostenstelleCheck.isEmpty()) throw new IllegalStateException();
-            UserKostenstelle userKostenstelle = new UserKostenstelle();
-            userKostenstelle.setKostenstelle(it);
-            userKostenstelle.setUser(user);
-            user.getKostenstellen().add(userKostenstelle);
-        });
+        if (registerDto.kostenstellen() != null) {
+            registerDto.kostenstellen().forEach(it -> {
+                var kostenstelleCheck = datensatzRepository.findDatensaetzeForKostenstellen(List.of(it), PageRequest.of(0, 1));
+                if (kostenstelleCheck.isEmpty()) throw new IllegalStateException();
+                UserKostenstelle userKostenstelle = new UserKostenstelle();
+                userKostenstelle.setKostenstelle(it);
+                userKostenstelle.setUser(user);
+                user.getKostenstellen().add(userKostenstelle);
+            });
+        }
         userRepository.save(user);
         return new AuthDto(jwtService.generateToken(user), registerDto.kostenstellen());
     }

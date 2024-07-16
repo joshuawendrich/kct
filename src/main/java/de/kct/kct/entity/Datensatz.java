@@ -1,17 +1,17 @@
 package de.kct.kct.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Datensatz {
@@ -20,7 +20,7 @@ public class Datensatz {
     private Integer aposType;
     private String vertragsnummer;
     private String vertragsbezeichnung;
-    private String teilvertragsnummer;
+    private String rahmenvertragsbezeichnung;
     private String bestellnummer;
     private String bestellnummerKunde;
     private String systelPspElement;
@@ -82,5 +82,7 @@ public class Datensatz {
     // Zusatzfelder
     @OneToOne(mappedBy = "datensatz", cascade = CascadeType.ALL)
     private ZusatzInfos zusatzInfos;
+
+    private String rahmenvertragsnummer;
 
 }
