@@ -10,14 +10,12 @@ import de.kct.kct.repository.DatensatzRepository;
 import de.kct.kct.repository.UserKostenstelleRepository;
 import de.kct.kct.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -37,10 +35,13 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final DatenService datenService;
+
     public AuthDto loginUser(LoginDto loginDto) {
         var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail().toLowerCase(), loginDto.getPassword()));
         var userKostenstellen = userKostenstelleRepository.findByUser((User) auth.getPrincipal());
-        return new AuthDto(jwtService.generateToken((UserDetails) auth.getPrincipal()), userKostenstellen.stream().map(UserKostenstelle::getKostenstelle).collect(Collectors.toSet()));
+        var organisationseinheiten = datenService.getOrganisationseinheitenForUser((User) auth.getPrincipal());
+        return new AuthDto(jwtService.generateToken((UserDetails) auth.getPrincipal()), userKostenstellen.stream().map(UserKostenstelle::getKostenstelle).collect(Collectors.toSet()), organisationseinheiten);
     }
 
     public AuthDto registerUser(RegisterDto registerDto) {
@@ -52,7 +53,7 @@ public class UserService {
         user.setPasswordHash(passwordEncoder.encode(registerDto.password()));
         if (registerDto.kostenstellen() != null) {
             registerDto.kostenstellen().forEach(it -> {
-                var kostenstelleCheck = datensatzRepository.findDatensaetzeForKostenstellen(List.of(it), PageRequest.of(0, 1));
+                var kostenstelleCheck = datensatzRepository.findDatensatzByKostenstelle(it);
                 if (kostenstelleCheck.isEmpty()) throw new IllegalStateException();
                 UserKostenstelle userKostenstelle = new UserKostenstelle();
                 userKostenstelle.setKostenstelle(it);
@@ -61,6 +62,7 @@ public class UserService {
             });
         }
         userRepository.save(user);
-        return new AuthDto(jwtService.generateToken(user), registerDto.kostenstellen());
+        var organisationseinheiten = datenService.getOrganisationseinheitenForUser(user);
+        return new AuthDto(jwtService.generateToken(user), registerDto.kostenstellen(), organisationseinheiten);
     }
 }

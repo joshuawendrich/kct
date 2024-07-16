@@ -30,16 +30,16 @@ public class DatenController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DatensatzDto>> getData(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String kostenstelle) {
-        return new ResponseEntity<>(datenService.getData(UserUtils.getCurrentUser(), kostenstelle, page, pageSize), HttpStatus.OK);
+    public ResponseEntity<List<DatensatzDto>> getData(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String kostenstelle, @RequestParam(required = false) String organisationseinheit) {
+        return new ResponseEntity<>(datenService.getData(UserUtils.getCurrentUser(), kostenstelle, organisationseinheit, page, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/download")
-    public ResponseEntity<byte[]> downloadData(@RequestParam(required = false) String kostenstelle) {
+    public ResponseEntity<byte[]> downloadData(@RequestParam(required = false) String kostenstelle, @RequestParam(required = false) String organisationseinheit) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         headers.set("Content-Disposition", "attachment; filename=\"data.xlsx\"");
-        return ResponseEntity.ok().headers(headers).body(datenService.downloadData(UserUtils.getCurrentUser(), kostenstelle));
+        return ResponseEntity.ok().headers(headers).body(datenService.downloadData(UserUtils.getCurrentUser(), kostenstelle, organisationseinheit));
     }
 
 

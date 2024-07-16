@@ -44,21 +44,27 @@ public class DatenService {
         }
     }
 
+    public List<String> getOrganisationseinheitenForUser(User user) {
+        return datensatzRepository.findOrganisationseinheitenForUser(user.getKostenstellen().stream().map(UserKostenstelle::getKostenstelle).toList());
+    }
+
     private void checkKostenstelle(User user, String kostenstelle) {
         if (kostenstelle != null && user.getKostenstellen().stream().noneMatch(k -> k.getKostenstelle().equals(kostenstelle)))
             throw new RuntimeException();
     }
 
-    public List<DatensatzDto> getData(User user, String kostenstelle, Integer page, Integer pageSize) {
+    public List<DatensatzDto> getData(User user, String kostenstelle, String organisationseinheit, Integer page, Integer pageSize) {
         checkKostenstelle(user, kostenstelle);
         var kostenstellen = kostenstelle == null ? user.getKostenstellen().stream().map(UserKostenstelle::getKostenstelle).toList() : List.of(kostenstelle);
-        return datensatzRepository.findDatensaetzeForKostenstellen(kostenstellen, Pageable.unpaged()).stream().map(DatensatzDto::fromDatensatz).toList();
+        var organisationseinheiten = organisationseinheit == null ? getOrganisationseinheitenForUser(user) : List.of(organisationseinheit);
+        return datensatzRepository.findDatensaetzeForKostenstellenAndOrganisationseinheiten(kostenstellen, organisationseinheiten, Pageable.unpaged()).stream().map(DatensatzDto::fromDatensatz).toList();
     }
 
-    public byte[] downloadData(User user, String kostenstelle) {
+    public byte[] downloadData(User user, String kostenstelle, String organisationseinheit) {
         checkKostenstelle(user, kostenstelle);
         var kostenstellen = kostenstelle == null ? user.getKostenstellen().stream().map(UserKostenstelle::getKostenstelle).toList() : List.of(kostenstelle);
-        var datensaetze = datensatzRepository.findDatensaetzeForKostenstellen(kostenstellen, Pageable.unpaged());
+        var organisationseinheiten = organisationseinheit == null ? getOrganisationseinheitenForUser(user) : List.of(organisationseinheit);
+        var datensaetze = datensatzRepository.findDatensaetzeForKostenstellenAndOrganisationseinheiten(kostenstellen, organisationseinheiten, Pageable.unpaged());
         return createExcelFile(datensaetze);
     }
 
