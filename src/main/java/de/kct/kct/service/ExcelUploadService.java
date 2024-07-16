@@ -120,6 +120,7 @@ public class ExcelUploadService {
                         ZusatzInfos zusatzInfos = new ZusatzInfos();
                         zusatzInfos.setPspElement(previousDatensaetze.get(0).getZusatzInfos().getPspElement());
                         zusatzInfos.setAbgerechnetMonat(LocalDate.now().getMonthValue());
+                        zusatzInfos.setAbgerechnetJahr(LocalDate.now().getYear());
                         zusatzInfos.setDatensatz(datensatz);
                         datensatz.setZusatzInfos(zusatzInfos);
                     }
