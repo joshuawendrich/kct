@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,11 +86,18 @@ public class ArtikelstammdatenService {
         headerCell = header.createCell(7);
         headerCell.setCellStyle(headerStyle);
         headerCell.setCellValue("Monat");
+        List<Row> rows = new ArrayList<>();
         for (int i = 0; i < datensaetze.size(); i++) {
             Datensatz datensatz = datensaetze.get(i);
             Optional<Artikelstammdaten> artikelstammdatenOptional = artikelstammdatenList.stream().filter(it -> it.getOeKurz() != null && it.getOeKurz().equals(datensatz.getOrganisationseinheit())).findFirst();
             if (artikelstammdatenOptional.isEmpty()) continue;
             Artikelstammdaten artikelstammdaten = artikelstammdatenOptional.get();
+            Optional<Row> existingRow = rows.stream().filter(r -> r.getCell(1).getStringCellValue().equals(artikelstammdaten.getModulbezeichnung()) && r.getCell(2).getStringCellValue().equals(datensatz.getZusatzInfos().getPspElement()) && r.getCell(3).getStringCellValue().equals(artikelstammdaten.getArtikelnummer())).findFirst();
+            if (existingRow.isPresent()) {
+                int existingRowIndex = rows.indexOf(existingRow.get());
+                sheet.getRow(existingRowIndex + 1).getCell(4).setCellValue(sheet.getRow(existingRowIndex + 1).getCell(4).getNumericCellValue() + datensatz.getGesamtpreis());
+                continue;
+            }
             Row row = sheet.createRow(i + 1);
             setCellValue(row, 0, String.valueOf(year));
             setCellValue(row, 1, artikelstammdaten.getModulbezeichnung());
@@ -99,6 +107,7 @@ public class ArtikelstammdatenService {
             setCellValue(row, 5, 1);
             setCellValue(row, 6, "");
             setCellValue(row, 7, String.valueOf(month));
+            rows.add(row);
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
