@@ -124,6 +124,15 @@ public class ExcelUploadService {
                         zusatzInfos.setDatensatz(datensatz);
                         datensatz.setZusatzInfos(zusatzInfos);
                     }
+                    List<Datensatz> previousDatensaetzeBemerkung = datensatzRepository.findDatensaetzeForDetailAndNutzerWithBemerkung(datensatz.getDetailangabe1(), datensatz.getNutzer());
+                    if (!previousDatensaetzeBemerkung.isEmpty()) {
+                        if (datensatz.getZusatzInfos() == null) {
+                            ZusatzInfos zusatzInfos = new ZusatzInfos();
+                            zusatzInfos.setDatensatz(datensatz);
+                            datensatz.setZusatzInfos(zusatzInfos);
+                        }
+                        datensatz.getZusatzInfos().setBemerkung(previousDatensaetzeBemerkung.get(0).getZusatzInfos().getBemerkung());
+                    }
                 }
                 customers.add(datensatz);
             }
