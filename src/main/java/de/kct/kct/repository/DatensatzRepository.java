@@ -21,7 +21,7 @@ public interface DatensatzRepository extends JpaRepository<Datensatz, Integer> {
     @Query("SELECT d FROM Datensatz d WHERE d.kostenstelle IN ?1 AND d.zusatzInfos.abgerechnetMonat = ?2 AND d.zusatzInfos.abgerechnetJahr = ?3")
     List<Datensatz> findDatensaetzeForKostenstellenAndMonth(List<String> kostenstellen, Integer abgerechnetMonat, Integer abgerechnetJahr);
 
-    @Query("SELECT d.organisationseinheit FROM Datensatz d WHERE d.kostenstelle IN ?1")
+    @Query("SELECT DISTINCT d.organisationseinheit FROM Datensatz d WHERE d.kostenstelle IN ?1")
     List<String> findOrganisationseinheitenForUser(List<String> kostenstellen);
 
     List<Datensatz> findDatensatzByKostenstelle(String kostenstelle);
