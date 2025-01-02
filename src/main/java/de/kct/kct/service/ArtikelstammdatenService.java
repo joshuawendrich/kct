@@ -50,7 +50,8 @@ public class ArtikelstammdatenService {
         int year = LocalDate.now().getYear();
         List<String> userKostenstellen = currentUser.getKostenstellen().stream().map(UserKostenstelle::getKostenstelle).toList();
         List<Datensatz> datensatzList = datensatzRepository.findDatensaetzeForKostenstellenAndMonth(userKostenstellen, generateIlvDto.monat(), year);
-        List<Artikelstammdaten> artikelstammdatenList = artikelstammdatenRepository.findArtikelstammdatenByOeKurzIn(datensatzList.stream().map(Datensatz::getOrganisationseinheit).toList());
+        List<String> oekurzList = datensatzList.stream().map(Datensatz::getOrganisationseinheit).toList();
+        List<Artikelstammdaten> artikelstammdatenList = artikelstammdatenRepository.findArtikelstammdatenByOeKurzIn(oekurzList);
         return createExcelFile(datensatzList, artikelstammdatenList, year, generateIlvDto.monat());
     }
 
