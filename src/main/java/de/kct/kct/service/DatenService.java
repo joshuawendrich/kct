@@ -174,6 +174,7 @@ public class DatenService {
 
     public void updateZusatzInfos(Integer datensatzId, UpdateZusatzInfosDto updateZusatzInfosDto) {
         changeZusatzInfos(datensatzId, updateZusatzInfosDto);
+        if (updateZusatzInfosDto.dontOverride()) return;
         datensatzRepository.findOtherDatensaetze(datensatzId).forEach(ds -> changeZusatzInfos(ds.getId(), updateZusatzInfosDto));
     }
 
